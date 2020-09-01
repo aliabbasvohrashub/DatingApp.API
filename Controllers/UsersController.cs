@@ -51,6 +51,12 @@ namespace DatingApp.API.Controllers
             return Ok(usersToReturn);
         }
 
+        [HttpGet("CheckUser/{userName}")]
+        public async Task<IActionResult> CheckUser(string userName)
+        {
+            return Ok(await _repo.CheckUserExists(userName));
+        }
+
         [HttpGet("{id}", Name = "GetUser")]
         public async Task<IActionResult> GetUser(int id)
         {
@@ -87,7 +93,7 @@ namespace DatingApp.API.Controllers
 
             if (like != null)
                 return BadRequest("You already like this user");
-            
+
             if (await _repo.GetUser(recipientId) == null)
                 return NotFound();
 
@@ -101,7 +107,7 @@ namespace DatingApp.API.Controllers
 
             if (await _repo.SaveAll())
                 return Ok();
-            
+
             return BadRequest("Failed to like user");
         }
     }
